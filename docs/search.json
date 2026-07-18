@@ -214,9 +214,9 @@
   {
     "objectID": "Cleansing_Exploration/project1.html",
     "href": "Cleansing_Exploration/project1.html",
-    "title": "Client Report - [Insert Project Title]",
+    "title": "Final Project UFO Sightings",
     "section": "",
-    "text": "Paste in a template\n\n\n\n\n Back to top",
+    "text": "Show the code\nlibrary(tidyverse)\nlibrary(leaflet)\nlibrary(sf)\nlibrary(tigris)\noptions(tigris_use_cache = TRUE)\nlibrary(tidycensus)\nlibrary(tidytext)\nlibrary(geofacet)\n\ndat &lt;- read_csv(\"/Users/loganlay/Documents/ufo_sightings_scrubbed.csv\")",
     "crumbs": [
       "Data Exploration",
       "Project 1"
@@ -377,5 +377,71 @@
     "title": "Logan Lay’s CV",
     "section": "",
     "text": "Languages & Libraries Python, SQL, Pandas, PySpark, Plotly, object-oriented languages\nMethods Machine learning, data analysis, data preparation, concurrent programming, parallel processing, linear algebra, calculus\nTools GitHub, Visual Studio, MySQL Workbench, Microsoft Excel, Custom GPTs"
+  },
+  {
+    "objectID": "Cleansing_Exploration/project1.html#data-wrangling-for-three-most-common-reported-ufo-shapes-by-state",
+    "href": "Cleansing_Exploration/project1.html#data-wrangling-for-three-most-common-reported-ufo-shapes-by-state",
+    "title": "Final Project UFO Sightings",
+    "section": "Data Wrangling for Three Most Common Reported UFO Shapes by State",
+    "text": "Data Wrangling for Three Most Common Reported UFO Shapes by State\n\n\nShow the code\nshape_dist_state &lt;- dat %&gt;% \n  filter(country == \"us\",\n    !state %in% c(\"pr\", \"vi\", \"gu\", \"as\", \"mp\", \"dc\", \"hi\", \"ak\")\n    ) %&gt;% \n  drop_na(shape) %&gt;% \n  group_by(shape, state) %&gt;% \n  summarize(count = n()) %&gt;% \n  group_by(state) %&gt;% \n  slice_max(count, n = 3, with_ties = FALSE) %&gt;% \n  mutate(\n    state = str_to_upper(state),\n    shape = str_to_title(shape)\n    )",
+    "crumbs": [
+      "Data Exploration",
+      "Project 1"
+    ]
+  },
+  {
+    "objectID": "Cleansing_Exploration/project1.html#insights",
+    "href": "Cleansing_Exploration/project1.html#insights",
+    "title": "Final Project UFO Sightings",
+    "section": "Insights",
+    "text": "Insights\nSeeing a “light” is the most common description of the sightings, while we have other repeated shapes, such as triangles and circles. It is interesting to see that the top reported shape has been consistent across both the years they were reported and the states they were reported in. For something that usually seems to be a misidentification, it has pretty decent consistency on the reported type of shape that these “extraterrestrials” fly.\nSomething I would like to further research with this data is how the reports evolve over time. Were the first years very similar? Were they isolated to one area of the US? At what times were these sightings reported to have been seen? Perhaps everyone claims they saw a light simply because that is what the first few people reported, and now it has become the norm.",
+    "crumbs": [
+      "Data Exploration",
+      "Project 1"
+    ]
+  },
+  {
+    "objectID": "Cleansing_Exploration/project1.html#data-wrangling-for-ufo-sighting-report-map",
+    "href": "Cleansing_Exploration/project1.html#data-wrangling-for-ufo-sighting-report-map",
+    "title": "Final Project UFO Sightings",
+    "section": "Data Wrangling for UFO Sighting Report Map",
+    "text": "Data Wrangling for UFO Sighting Report Map\n\n\nShow the code\n# Getting county population data from US Census API\ncounty_pop &lt;- get_acs(\n  geography = \"county\",\n  variables = \"B01003_001\", # total population\n  year = 2022, # match the county boundary year pull\n  survey = \"acs5\"\n) %&gt;% \n  select(GEOID, estimate)\n\n\n# Getting US county data\ncounties_sf &lt;- counties(cb = TRUE, resolution = \"20m\", year = 2022)\n\n\n# Filtering to be the main 48 states of spatial data\ncounties_sf &lt;- counties_sf %&gt;%\n  filter(!STATEFP %in% c(\"02\",\"15\",\"72\",\"60\",\"66\",\"69\",\"78\"))\n\n\n# Getting county polygons to be in the right format\ncounties_sf &lt;- st_transform(counties_sf, 4326)\n\n\n# Filtering the UFO data to only be the main 48 states in the US\nufo_us &lt;- dat %&gt;% \n  filter(country == \"us\",\n    !state %in% c(\"pr\", \"vi\", \"gu\", \"as\", \"mp\", \"dc\", \"hi\", \"ak\")\n    )\n\n\n# Preparing UFO data for county aggregation; only keeping the main 48 states\nufo_counties &lt;- dat %&gt;% \n  filter(country == \"us\",\n    !state %in% c(\"pr\", \"vi\", \"gu\", \"as\", \"mp\", \"dc\", \"hi\", \"ak\")\n    ) %&gt;% \n  st_as_sf(coords = c(\"longitude\",\"latitude\"), crs = 4326) %&gt;% \n  st_join(y=counties_sf, join=st_within) %&gt;% \n  group_by(GEOID, NAME) %&gt;% \n  summarize(ufo_sighting_count = n()) %&gt;% \n  select(GEOID, ufo_sighting_count) %&gt;% \n  st_drop_geometry()\n\n\n# Joining UFO & Population County Data\ncounties_sf &lt;- counties_sf %&gt;% \n  left_join(y=ufo_counties, by=\"GEOID\") %&gt;% \n  mutate(ufo_sighting_count = coalesce(ufo_sighting_count, 0)) %&gt;% \n  left_join(y=county_pop, by=\"GEOID\")\n\n\n# Calculating the Sighting Ratio\ncounties_sf &lt;- counties_sf %&gt;% \n  mutate(sighting_ratio = round(ufo_sighting_count / estimate * 1e5, 2))\n\n\n# Creating a floor for the sighting/ratio so that smaller populations don't look ginormous\ncounties_sf &lt;- counties_sf %&gt;% \n  mutate(rate_display = ifelse(estimate &lt; 5000, NA, sighting_ratio))\n\n\n# Color Pallets\npoint_pal &lt;- colorNumeric(\"Reds\", domain = ufo_us$`duration (seconds)`)\n\ncounty_pal &lt;- colorBin(\"Reds\", domain = counties_sf$rate_display, bins = c(0,1,5,10,25,50,100,250,Inf), na.color = \"#f0f0f0\")",
+    "crumbs": [
+      "Data Exploration",
+      "Project 1"
+    ]
+  },
+  {
+    "objectID": "Cleansing_Exploration/project1.html#insights-1",
+    "href": "Cleansing_Exploration/project1.html#insights-1",
+    "title": "Final Project UFO Sightings",
+    "section": "Insights",
+    "text": "Insights\nWhen I first got a hold of this data, I was really hoping to find that all the UFO sightings would be centralized around one location, and at first it seemed that seeing UFOs is a numbers game. When I looked at the data I came to the conclusion that the more people there are in an area, the more UFO sightings would be, which makes sense on its own. Something interesting happened with my ratio metric though.\nIf you take the time to look into the metrics that I gave on the map, you’ll notice that the more dense areas of the United States have the highest raw number of sightings, but the lowest rates per 100,000 people. The rural, low-population counties are where a given person is most likely to report something.\nAdditionally, I would love to input more county-level layers to test whether sighting rates correlate with other regional characteristics such as substance use prevalence, educational attainment, or median income. This is something I would have to be more careful with because any relationship would be correlational and subject to the ecological fallacy: county-level averages cannot establish anything about the individuals who filed reports.",
+    "crumbs": [
+      "Data Exploration",
+      "Project 1"
+    ]
+  },
+  {
+    "objectID": "Cleansing_Exploration/project1.html#dataset",
+    "href": "Cleansing_Exploration/project1.html#dataset",
+    "title": "Final Project UFO Sightings",
+    "section": "Dataset",
+    "text": "Dataset\nKaggle UFO Sightings",
+    "crumbs": [
+      "Data Exploration",
+      "Project 1"
+    ]
+  },
+  {
+    "objectID": "Cleansing_Exploration/project1.html#ai-assistance-disclosure",
+    "href": "Cleansing_Exploration/project1.html#ai-assistance-disclosure",
+    "title": "Final Project UFO Sightings",
+    "section": "AI Assistance Disclosure",
+    "text": "AI Assistance Disclosure\nPortions of this project were developed with assistance from Claude (Anthropic), accessed July 2026. The AI’s contributions were advisory and instructional rather than generative of the core analysis. Specifically, Claude helped with:\n\nConceptual guidance: explaining per-capita normalization and why raw sighting counts largely track population, the reporting-bias limitations of the worldwide data (motivating the decision to restrict analysis to the U.S.), and the small-denominator problem in low-population counties.\nMethodological decisions: recommending county-level aggregation, a spatial join to assign points to counties, sourcing county boundaries (tigris) and population (tidycensus/ACS 5-year), and applying a population floor to prevent noisy rates from dominating the choropleth.\nTechnical explanation and debugging: clarifying R/sf functions (st_as_sf, st_join, coalesce, leaflet’s colorBin/addLegend), diagnosing errors (CRS mismatch, sf geometry persisting through joins, a re-run column collision), and explaining coordinate-system and per-100k scaling choices.\n\nAll analytical decisions, code implementation, data filtering, and interpretation were performed by the author. The AI did not select the dataset, run the analysis, or produce the final maps. Citation: Anthropic. (2026). Claude [large language model]. https://claude.ai",
+    "crumbs": [
+      "Data Exploration",
+      "Project 1"
+    ]
   }
 ]
