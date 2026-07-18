@@ -1,89 +1,86 @@
 ---
 layout: cv
-title: Isaac Newtons's CV
+title: Logan Lay's CV
 ---
-# Isaac Newton
-Physicist, Mathematician, Cambridge professor.
+# Logan Lay
+
+Data Scientist, AI Enthusiast, Tutor.
 
 <div id="webaddress">
-<a href="isaac@applesdofall.org">isaac@applesdofall.org</a>
-| <a href="http://en.wikipedia.org/wiki/Isaac_Newton">My wikipedia page</a>
+<a href="mailto:logan@lojomarketing.com">logan@lojomarketing.com</a>
+| <a href="https://www.linkedin.com/in/logan-lay22/">My LinkedIn page</a>
 </div>
 
 
 ## Currently
 
-Standing on the shoulders of giants
+Pursuing a Bachelor's Degree in Computer Science and a Minor in Data Science at Brigham Young University-Idaho, graduating December 2026.
 
 ### Specialized in
 
-Laws of motion, gravitation, minting coins, disliking [Robert Hooke](http://en.wikipedia.org/wiki/Robert_Hooke)
-
+Data analysis, data visualization, machine learning, and AI implementation.
 
 ### Research interests
 
-Cooling, power series, optics, alchemy, planetary motions, apples.
+Shopper segmentation, clustering at scale, large language model fine-tuning, distributed data processing, and applied statistics.
 
 
 ## Education
 
-`1654-1660`
-__The King's School, Grantham.__
+`Sep 2023 - Dec 2026`
+__Brigham Young University-Idaho__, Rexburg, ID
 
-`June 1661 - now`
-__Trinity College, Cambridge__
-
-- Sizar
-
-`1667 - death`
-__Trinity College, Cambridge__
-
-- Fellow
-
+- Bachelor's Degree, Computer Science | Minor, Data Science
+- GPA: 3.98
+- Data Science Society, Computer Science Society, AI Society
 
 
 ## Awards
 
-`2012`
-President, *Royal Society*, London, UK
+`2023 - 2026`
+Full-Ride Academic Scholarship, *Brigham Young University-Idaho*
 
-Associate, *French Academy of Science*, Paris, France
-
-
-
-## Publications
-
-<!-- A list is also available [online](http://scholar.google.co.uk/citations?user=LTOTl0YAAAAJ) -->
-
-### Journals
-
-`1669`
-Newton Sir I, De analysi per æquationes numero terminorum infinitas. 
-
-`1669`
-Lectiones opticæ.
-
-etc. etc. etc.
-
-### Patents
-
-`2012`
-Infinitesimal calculus for solutions to physics problems, [SMBC](http://www.techdirt.com/articles/20121011/09312820678/if-patents-had-been-around-time-newton.shtml) patent 001
+`July 2026 - Dec 2026`
+President, *Data Science Society*, BYU-Idaho
 
 
 ## Occupation
 
-`1600`
-__Royal Mint__, London
+`May 2025 - Sep 2025`
+__LOJO Marketing__, Tennessee
 
-- Warden
-- Minted coins
+- Artificial Intelligence Intern
+- Built custom GPT solutions tailored to the needs of the sales team, working cross-functionally with sales and management to identify goals and iterate throughout the project lifecycle
+- Collected, organized, and applied proprietary data to train and refine large language models, ensuring outputs aligned with real business objectives
 
-`1600`
-__Lucasian professor of Mathematics__, Cambridge University
+`Jan 2025 - Apr 2025`
+__Brigham Young University-Idaho__, Idaho
 
+- Python Tutor
+- Worked directly with 20+ students weekly to strengthen foundational coding skills in Python, providing hands-on feedback through code review and constructive guidance
+- Evaluated student submissions alongside fellow teaching assistants, maintaining consistent grading turnaround ahead of each deadline
+
+`Jan 2024 - Present`
+__Brigham Young University-Idaho__, Idaho
+
+- Math Tutor
+- Dedicated 10+ hours per week guiding students through arithmetic, algebra, and Calculus I using clear examples and verbal communication
+- Managed 5+ simultaneous online chats, addressing student questions in real time with thorough explanations
+- Worked with students in both group and one-on-one settings, attending weekly training meetings to refine teaching strategies
+
+
+## Technical Skills
+
+__Languages & Libraries__
+Python, SQL, Pandas, PySpark, Plotly, object-oriented languages
+
+__Methods__
+Machine learning, data analysis, data preparation, concurrent programming, parallel processing, linear algebra, calculus
+
+__Tools__
+GitHub, Visual Studio, MySQL Workbench, Microsoft Excel, Custom GPTs
 
 
 <!-- ### Footer
 
-Last updated: May 2013 -->
+Last updated: July 2026 -->
